@@ -1,0 +1,26 @@
+AQI By State 1980-2022.csv Data Dictionary
+
+- geo_loc / Geographic location, dType object, represents state's geographic location in the Well-Known Text (WKT) format. 
+- year / Year, dtype int64, represents the given year that the related Asthma & CDI data was collected
+- state  / State, dType object, represents the state where the related Asthma and CDI data was collected
+- pop_est / Population Estimate, dType int64, represents the estimated population based on the current rows state and year value
+- TTL_Cnty / Total Counties, dType int64, represents the total number of counties based on the current rows state
+- Cnty_Rpt / Number of Counties Reporting, dType int64, represents the total number of counties reporting AQI data for the given state and year
+- Dys_w_AQI / Sum Number of Days with Air Quality Inex, dType int64, represents the sum number of days where the Air Quality Index (AQI) was measured across all reporting counties for the given state and year 
+- Dys_NM / Sum Number of Days Not Measured (Calculated), dType int64, represents the sum number of days where AQI was not measured across all reporting counties for the given state and year
+- Dys_Abv_Thr / Sum Number of Days above threshold (Calculated), dType int64,  represents the sum number of days where AQI was above the 'Moderate' threshold across all reporting counties for the given state and year
+- Dys_Blw_Thr / Sum Number of Days below threshold (Calculated), dType int64, represents the sum number of days where AQI was below or at the 'Moderate' threshold
+- Good Days / Sum Number of Good Days, dType int64, represents the sum number of days categorized as "Good" in terms of air quality across all reporting counties for the given state and year
+- Moderate Days / Sum Number of Moderate Days, dType int64, represents the sum number of days categorized as "Moderate" in terms of air quality across all reporting counties for the given state and year.
+- Unhealthy for Sensitive Groups Days / Sum Number of Unhealthy for Sensitive Groups Days, dType int64, represents the sum number of days categorized as "Unhealthy for Sensitive Groups" in terms of air quality across all reporting counties for the given state and year
+- Unhealthy Days / Sum Number of Unhealthy Days, dType int64, represents the sum number of days categorized as "Unhealthy" in terms of air quality across all reporting counties for the given state and year
+- Very Unhealthy Days / Sum Number of Very Unhealthy Days, dType int64, represents the sum number of days categorized as "Very Unhealthy" in terms of air quality across all reporting counties for the given state and year
+- Hazardous Days / Sum Number of Hazardous Days, dType int64, represents the sum number of days categorized as "Hazardous" in terms of air quality across all reporting counties for the given state and year
+- Max AQI / Sum Max Air Quality Index, dType int64, represents the sum of the maximum Air Quality Index (AQI) values recorded across all reporting counties for the given state and year
+- 90th Percentile AQI / Sum 90th Percentile Air Quality Index, dType int64, represents the sum of the 90th percentile Air Quality Index (AQI) values across all reporting counties for the given state and year
+- Median AQI / Sum Median Air Quality Index, dType int64, represents the sum of the median Air Quality Index (AQI) values across all reporting counties for the given state and year
+- Days CO / Sum Number of Days CO was main pollutant, dType int64, represents the sum number of days where Carbon Monoxide (CO) was identified as the main pollutant across all reporting counties for the given state and year
+- Days NO2 / Sum Number of Days NO2 was main pollutant, dType int64, represents the sum number of days where Nitrogen Dioxide (NO2) was identified as the main pollutant across all reporting counties for the given state and year
+- Days Ozone / Sum Number of Days Ozone was main pollutant, dType int64, represents the sum number of days where Ozone was identified as the main pollutant across all reporting counties for the given state and year
+- Days PM2.5 / Sum Number of Days Particulate Matter with diameter of 2.5 micrometers or smaller was main pollutant, dType int64, represents the sum number of days where Particulate Matter with a diameter of 2.5 micrometers or smaller (PM2.5) was identified as the main pollutant across all reporting counties for the given state and year
+- Days PM10 / Sum Number of Days Particulate Matter with a diameter of 10 micrometers or smaller was main pollutant, dType int64, represents the sum number of days where Particulate Matter with a diameter of 10 micrometers or smaller (PM10) was identified as the main pollutant across all reporting counties for the given state and year
