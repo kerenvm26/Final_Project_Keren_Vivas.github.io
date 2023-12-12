@@ -19,4 +19,4 @@ You can install the required packages by running the following R code:
 install.packages(c("shiny", Add)) 
 
 # Run the Shiny app from GitHub
-shiny::runGitHub("kerenvm26/Final_Project_Keren_Vivas.github.io", subdir = "app")
+shiny::runGitHub('Final_Project_Keren_Vivas', username = "kerenvm26", subdir = "Final_Project")
