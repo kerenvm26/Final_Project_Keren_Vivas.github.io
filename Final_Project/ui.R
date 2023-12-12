@@ -2,6 +2,8 @@
 library(ggplot2)
 library(shiny)
 library(dplyr)
+library(caret)
+library(randomForest)
 
 data <- read.csv("C:/Users/kvivasm/OneDrive - North Carolina State University/Documents/ST 558 (601) Data Science for Statisticians/Final_Project_Keren_Vivas.github.io/AQI By State 1980-2022.csv")
 data <- data %>%
@@ -90,16 +92,42 @@ data <- data %>%
                tabPanel(HTML("<b>Modeling Info</b>"),
                         fluidPage(
                           # Add content for Modeling Info tab
+                          tags$h3("Modeling Approaches"),
+                          tags$p("You can choose between two types of supervised learning models:"),
+                          tags$ul(
+                            tags$li("Multiple Linear Regression"),
+                            tags$li("Random Forest Model")
+                          ),
+                          tags$h3("Benefits and Drawbacks"),
+                          tags$p("Explain the benefits and drawbacks of each model."),
+                          tags$h3("Mathematical Explanation"),
+                          tags$p("Use mathJax to include mathematical explanations.")
                         )
                ),
                tabPanel(HTML("<b>Model Fitting</b>"),
                         fluidPage(
                           # Add content for Model Fitting tab
+                          selectInput("response_type", "Select Response Type:",
+                                      choices = c("Multiple Linear Regression", "Random Forest")),
+                          numericInput("test_train_split", "Test/Train Split Percentage:", value = 0.8, min = 0, max = 1, step = 0.1),
+                          selectInput("predictors_model1", "Select Predictors for Model 1:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          selectInput("predictors_model2", "Select Predictors for Model 2:", choices = c("Year","Population_estimate", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          conditionalPanel(
+                            condition = "input.response_type == 'Random Forest'",
+                            textInput("tune_grid", "Tuning Parameter Grid:"),
+                            numericInput("cv_setting", "Cross-Validation Setting:", value = 10, min = 2)
+                          ),
+                          actionButton("fit_models_btn", "Fit Models"),
+                          verbatimTextOutput("model_summaries")
                         )
                ),
                tabPanel(HTML("<b>Prediction</b>"),
                         fluidPage(
                           # Add content for Prediction tab
+                          selectInput("predictor_value1", "Select Value for Predictor 1:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          selectInput("predictor_value2", "Select Value for Predictor 2:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          actionButton("predict_btn", "Get Predictions"),
+                          verbatimTextOutput("predictions")
                         )
                )
              )
