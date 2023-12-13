@@ -163,36 +163,89 @@ server <- shinyServer(function(input, output, session) {
       })
     }
   })
-  # Model fitting logic
-  observeEvent(input$fit_models_btn, {
-    # Retrieve user inputs
-    test_train_split <- input$test_train_split
-    response_linear_model <- input$response_linear_model
-    predictors_linear_model <- input$predictors_linear_model
-    response_rf_model <- input$response_randomforest_model
-    predictors_rf_model <- input$predictors_randomforest_model
-    tune_grid <- input$tune_grid
-    cv_setting <- input$cv_setting
-    
-    # Perform test/train split (you need to implement this part)
-    # train_data <- ...
-    # test_data <- ...
-    
-    # Fit and evaluate linear model
-    linear_model_summaries <- fit_and_evaluate_models(train_data, response_linear_model, predictors_linear_model, "lm", NULL, NULL)
-    
-    # Fit and evaluate random forest model
-    rf_model_summaries <- fit_and_evaluate_models(train_data, response_rf_model, predictors_rf_model, "randomForest", tune_grid, cv_setting)
-    
-    # Display model summaries
-    output$model_summaries <- renderPrint({
-      cat("Linear Model Summaries:\n")
-      print(linear_model_summaries)
-      
-      cat("\nRandom Forest Model Summaries:\n")
-      print(rf_model_summaries)
-    })
-  })
   
+    # Define reactive values to store model objects
+    models <- reactiveValues(model1 = NULL, model2 = NULL)
+    model_metrics <- reactiveValues(rmse_model1 = NULL, rmse_model2 = NULL)
+    
+    
+    # Fit models on button click
+    observeEvent(input$fit_models_btn, {
+      
+      # Retrieve user inputs
+      test_train_split <- input$test_train_split
+      response <- input$response
+      predictors_linear_model <- input$predictors_linear_model
+      predictors_rf_model <- input$predictors_randomforest_model
+      tune_grid <- input$tune_grid
+      cv_setting <- input$cv_setting
+      
+      # Split data into training and testing sets
+      set.seed(123)  # Set seed for reproducibility
+      train_index <- createDataPartition(data$response, p = test_train_split, list = FALSE)
+      train_set <- data[train_index, ]
+      test_set <- data[-train_index, ]
+      
+      # Fit and evaluate linear model
+      linear_model <- lm(response ~ ., data = data[, c("response", predictors_linear_model)])
+      models$model1 <- linear_model
+      
+      # Get predictions on the training set
+      linear_predictions_train <- predict(linear_model, newdata = data)
+      
+      # Calculate RMSE on the training set
+      rmse_linear_train <- sqrt(mean((linear_predictions_train - data$response)^2))
+      
+      # Display model summaries
+      output$model_summaries1 <- renderPrint({
+        cat("Linear Model Summary:\n")
+        print(summary(linear_model))  # Use summary() for linear models
+        cat("RMSE for Linear Model on Training Data:", rmse_linear_train, "\n")
+      })
+      
+      # Fit and evaluate random forest model
+      rf_model <- train(
+        response ~ .,
+        data = data,
+        method = "rf",
+        trControl = trainControl(method = "cv", number = cv_setting, verboseIter = TRUE),
+        tuneGrid = tuning_grid
+      )
+      
+      # Get predictions on the training set
+      rf_predictions_train <- predict(rf_model, newdata = data)
+      
+      # Calculate RMSE on the training set
+      rmse_rf_train <- sqrt(mean((rf_predictions_train - data$response)^2))
+      
+      # Display model summaries
+      output$model_summaries2 <- renderPrint({
+        cat("Random Forest Model Summary:\n")
+        print(rf_model$finalModel)  # For random forest, you can access the final model directly
+        cat("RMSE for Random Forest Model on Training Data:", rmse_rf_train, "\n")
+        
+        # Plot variable importance
+        varImpPlot(rf_model$finalModel)
+      })
+    })
+  
+  
+      # Predict on button click
+      observeEvent(input$predict_btn, {
+        # Get predictor values from inputs
+        predictor_values <- c(predictor1 = input$predictor_value1, predictor2 = input$predictor_value2)
+        
+        # Predict using Linear Model
+        prediction_linear <- predict(linear_model, newdata = predictor_values)
+        
+        # Predict using Random Forest Model
+        prediction_rf <- predict(rf_model, newdata = predictor_values)
+        
+        # Display predictions
+        predictions <- c(Linear_Model = prediction_linear, Random_Forest_Model = prediction_rf)
+        output$predictions <- renderPrint(predictions)
+      })
 })
 
+
+    

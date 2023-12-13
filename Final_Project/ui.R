@@ -106,29 +106,49 @@ ui <- shinyUI(
                ),
                tabPanel(HTML("<b>Model Fitting</b>"),
                         fluidPage(
+                          titlePanel(HTML("<b>Model Fitting</b>")),
+                          sidebarLayout(
+                            sidebarPanel(
                           # Add content for Model Fitting tab
                           numericInput("test_train_split", "Test/Train Split Percentage:", value = 0.8, min = 0, max = 1, step = 0.1),
-                          selectInput("response_linear_model", "Select Response for Multiple Linear Model:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          selectInput("response", "Select Response", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
                           selectizeInput("predictors_linear_model", "Select Predictors for Multiple linear model:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10"), multiple = TRUE),
-                          selectInput("response_randomforest_model", "Select Response for Random Forest Model:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
                           selectizeInput("predictors_randomforest_model", "Select Predictors for Random Forest Model:", choices = c("Year","Population_estimate", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10"), multiple = TRUE),
                           textInput("tune_grid", "Tuning Parameter Grid for Random Forest Model:"),
                           numericInput("cv_setting", "Cross-Validation Setting for Random Forest Model:", value = 10, min = 2),
-                          actionButton("fit_models_btn", "Fit Models"),
-                          verbatimTextOutput("model_summaries")
+                          actionButton("fit_models_btn", "Fit Models")
+                        ),
+                        
+                        mainPanel(
+                          # Add output elements for displaying model fits
+                          verbatimTextOutput("model_summaries1"),
+                          verbatimTextOutput("model_summaries2")
                         )
+               )
+               )
                ),
+               
                tabPanel(HTML("<b>Prediction</b>"),
                         fluidPage(
+                          titlePanel(HTML("<b>Prediction</b>")),
+                          sidebarLayout(
+                            sidebarPanel(
                           # Add content for Prediction tab
                           selectInput("predictor_value1", "Select Value for Predictor 1:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
                           selectInput("predictor_value2", "Select Value for Predictor 2:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
                           actionButton("predict_btn", "Get Predictions"),
-                          verbatimTextOutput("predictions")
-               )
+               ),
+               
+                 mainPanel(
+                 # Add output elements for displaying predictions
+                 verbatimTextOutput("predictions")
              )
     )
     
   )
-))
+)
 
+)
+)
+
+))
