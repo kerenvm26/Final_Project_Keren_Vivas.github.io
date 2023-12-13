@@ -1,4 +1,3 @@
-
 library(shiny)
 
 server <- shinyServer(function(input, output, session) {
@@ -41,7 +40,7 @@ server <- shinyServer(function(input, output, session) {
                                         "Median" = round(median(filtered_data[[variable1]]), 2),
                                         "Standard Deviation" = round(sd(filtered_data[[variable1]]), 2),
                                         "Summary" = {
-                                        paste("Length:", length(filtered_data[[variable1]]),
+                                          paste("Length:", length(filtered_data[[variable1]]),
                                                 "Min:", round(min(filtered_data[[variable1]]), 2),
                                                 "Max:", round(max(filtered_data[[variable1]]), 2),
                                                 "Mean:", round(mean(filtered_data[[variable1]]), 2),
@@ -164,4 +163,36 @@ server <- shinyServer(function(input, output, session) {
       })
     }
   })
+  # Model fitting logic
+  observeEvent(input$fit_models_btn, {
+    # Retrieve user inputs
+    test_train_split <- input$test_train_split
+    response_linear_model <- input$response_linear_model
+    predictors_linear_model <- input$predictors_linear_model
+    response_rf_model <- input$response_randomforest_model
+    predictors_rf_model <- input$predictors_randomforest_model
+    tune_grid <- input$tune_grid
+    cv_setting <- input$cv_setting
+    
+    # Perform test/train split (you need to implement this part)
+    # train_data <- ...
+    # test_data <- ...
+    
+    # Fit and evaluate linear model
+    linear_model_summaries <- fit_and_evaluate_models(train_data, response_linear_model, predictors_linear_model, "lm", NULL, NULL)
+    
+    # Fit and evaluate random forest model
+    rf_model_summaries <- fit_and_evaluate_models(train_data, response_rf_model, predictors_rf_model, "randomForest", tune_grid, cv_setting)
+    
+    # Display model summaries
+    output$model_summaries <- renderPrint({
+      cat("Linear Model Summaries:\n")
+      print(linear_model_summaries)
+      
+      cat("\nRandom Forest Model Summaries:\n")
+      print(rf_model_summaries)
+    })
+  })
+  
 })
+

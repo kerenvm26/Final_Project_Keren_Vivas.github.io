@@ -21,9 +21,9 @@ data <- data %>%
     Days_with_high_PM10 = Days.PM10,
     Number_of_counties_measured = Cnty_Rpt,
     Population_estimate = Pop_Est)
-      
 
-  ui <- shinyUI(
+
+ui <- shinyUI(
   navbarPage(
     title = HTML("<b>Air Quality Index Across US States</b>"),
     tabPanel(HTML("<b>About</b>"),
@@ -71,7 +71,7 @@ data <- data %>%
                    actionButton("updateBtn", "Show/Update Summaries and Plots")
                  ),
                  
-          
+                 
                  mainPanel(
                    # Additional textOutput elements for displaying summary statistics
                    textOutput("summary_text1"),
@@ -107,16 +107,13 @@ data <- data %>%
                tabPanel(HTML("<b>Model Fitting</b>"),
                         fluidPage(
                           # Add content for Model Fitting tab
-                          selectInput("response_type", "Select Response Type:",
-                                      choices = c("Multiple Linear Regression", "Random Forest")),
                           numericInput("test_train_split", "Test/Train Split Percentage:", value = 0.8, min = 0, max = 1, step = 0.1),
-                          selectInput("predictors_model1", "Select Predictors for Model 1:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
-                          selectInput("predictors_model2", "Select Predictors for Model 2:", choices = c("Year","Population_estimate", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
-                          conditionalPanel(
-                            condition = "input.response_type == 'Random Forest'",
-                            textInput("tune_grid", "Tuning Parameter Grid:"),
-                            numericInput("cv_setting", "Cross-Validation Setting:", value = 10, min = 2)
-                          ),
+                          selectInput("response_linear_model", "Select Response for Multiple Linear Model:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          selectizeInput("predictors_linear_model", "Select Predictors for Multiple linear model:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10"), multiple = TRUE),
+                          selectInput("response_randomforest_model", "Select Response for Random Forest Model:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
+                          selectizeInput("predictors_randomforest_model", "Select Predictors for Random Forest Model:", choices = c("Year","Population_estimate", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10"), multiple = TRUE),
+                          textInput("tune_grid", "Tuning Parameter Grid for Random Forest Model:"),
+                          numericInput("cv_setting", "Cross-Validation Setting for Random Forest Model:", value = 10, min = 2),
                           actionButton("fit_models_btn", "Fit Models"),
                           verbatimTextOutput("model_summaries")
                         )
@@ -128,10 +125,10 @@ data <- data %>%
                           selectInput("predictor_value2", "Select Value for Predictor 2:", choices = c("Population_estimate", "Year", "State", "Good_days", "Moderate_days", "Unhealthy_days_for_sensitive_groups", "Unhealthy_days","Very_unhealthy_days", "Hazardous_days", " Days_with_high_CO", "Days_with_high_NO2", "Days_with_high_Ozone","Days_with_high_PM2.5", "Days_with_high_PM10")),
                           actionButton("predict_btn", "Get Predictions"),
                           verbatimTextOutput("predictions")
-                        )
                )
              )
     )
     
   )
-)
+))
+
