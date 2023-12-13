@@ -93,15 +93,37 @@ ui <- shinyUI(
                         fluidPage(
                           # Add content for Modeling Info tab
                           tags$h3("Modeling Approaches"),
-                          tags$p("You can choose between two types of supervised learning models:"),
+                          tags$p("You will be modeling two types of supervised learning models:"),
                           tags$ul(
                             tags$li("Multiple Linear Regression"),
                             tags$li("Random Forest Model")
                           ),
                           tags$h3("Benefits and Drawbacks"),
-                          tags$p("Explain the benefits and drawbacks of each model."),
+                          tags$p(
+                            "For Multiple Linear Regression:",
+                            tags$ul(
+                              tags$li("Benefits: Multiple linear regression captures complex relationships, quantifies variable importance, allows for inference and hypothesis testing, and supports prediction."),
+                              tags$li("Drawbacks: Assumption of linearity, multicollinearity, overfitting, and sensitivity to outliers and influential points.")
+                            )
+                          ),
+                          tags$p(
+                            "For Random Forest Model:",
+                            tags$ul(
+                              tags$li("Benefits: Random Forest is robust to overfitting, handles non-linearity well, and provides feature importance."),
+                              tags$li("Drawbacks: Random Forest can be computationally expensive and less interpretable compared to linear regression.")
+                            )
+                          ),
                           tags$h3("Mathematical Explanation"),
-                          tags$p("Use mathJax to include mathematical explanations.")
+                          tags$p(
+                            "For Multiple Linear Regression:",
+                            "The multiple linear regression model can be represented as:", 
+                            "Y = beta_0 + beta_1*X_1 + beta_2*X_2 + .. + beta_p*X_p + epsilon",
+                            "where Y is the dependent variable, X_1, X_2, ..., X_p$ are independent variables, beta_0 is the intercept, ",
+                            "beta_1, beta_2, ..., beta_p are regression coefficients, and epsilon is the error term."
+                          ),
+                          tags$p(
+                            "For Random Forest Model:",
+                            "Random Forest is an ensemble learning method based on decision trees. It builds multiple trees and merges them together to get a more accurate and stable prediction.")
                         )
                ),
                tabPanel(HTML("<b>Model Fitting</b>"),
